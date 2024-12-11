@@ -1,4 +1,4 @@
-class PlayerWallet {
+class PlayerWallet { 
     private int money;
 
     public PlayerWallet(int initialMoney) {
@@ -14,7 +14,7 @@ class PlayerWallet {
             money += amount;
             System.out.println("You earned " + amount + " coins! Your total is now " + money + " coins.");
         } else {
-            throw new RuntimeException("Invalid amount to add.");
+            throw new RuntimeException("Invalid amount to add."); //add to player
         }
     }
 
