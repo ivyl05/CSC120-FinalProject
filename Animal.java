@@ -1,27 +1,44 @@
+/*
+ * File name: Animal.java
+ * Description: Responsible for the animals in the Farm Game 
+ * Author: Ivy Li
+ * Date: 18 December 2024
+ */
 import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 
 class Animal {
-    private Hashtable<AnimalType, Integer> animals; 
-    private Hashtable<AnimalType, Integer> products; 
-    private Hashtable<AnimalType, Timer> animalTimers;
-    private PlayerWallet wallet; 
+    private Hashtable < AnimalType, Integer > animals; // Maps animal types to the numbers of animals in player's inventory
+    private Hashtable < AnimalType, Integer > products; // Maps animal types to the number of products they produced
+    private Hashtable < AnimalType, Timer > animalTimers; // Maps animal types to timers that manage production
+    private PlayerWallet wallet; // make a new PlayerWallet
 
+    /**
+     * Constructor initializes the attributes and sets up timers for each animal type.
+     * 
+     * @param wallet the wallet associated with the player, used for financial transactions.
+     */
     public Animal(PlayerWallet wallet) {
         this.wallet = wallet;
-        animals = new Hashtable<>();
-        products = new Hashtable<>();
-        animalTimers = new Hashtable<>();
-        
+        animals = new Hashtable < > ();
+        products = new Hashtable < > ();
+        animalTimers = new Hashtable < > ();
 
-        for (AnimalType animal : AnimalType.values()) { //AI generated
+        for (AnimalType animal: AnimalType.values()) {
             animals.put(animal, 0);
             products.put(animal, 0);
-            animalTimers.put(animal, new Timer(true)); 
+            animalTimers.put(animal, new Timer(true));
         }
     }
 
+    /**
+     * Purchases a specified number of animals of a given type and starts their production timer.
+     * 
+     * @param animal the type of animal to buy.
+     * @param number the number of animals to buy.
+     * @throws RuntimeException if the number of animals to buy is 0 or negative, or if there is not enough money.
+     */
     public void buyAnimal(AnimalType animal, int number) {
         if (number <= 0) {
             throw new RuntimeException("Invalid number of animals.");
@@ -35,12 +52,17 @@ class Animal {
             System.out.println("You bought " + number + " " + animal + "(s) for " + totalCost + " coins!");
             startProductionTimer(animal); // Start product generation timer
         } else {
-            System.out.println("Not enough coins to buy " + number + " " + animal + "(s). You need " + totalCost + " coins.");
+            throw new RuntimeException("Not enough coins to buy " + number + " " + animal + "(s). You need " + totalCost + " coins.");
         }
     }
 
-    private void startProductionTimer(AnimalType animal) { //ideas from GPT
-        int interval = getProductionInterval(animal); 
+    /**
+     * Starts a timer to produce products from the specified animal type at regular intervals
+     * 
+     * @param animal the type of animal to start producing products from
+     */
+    private void startProductionTimer(AnimalType animal) {
+        int interval = getProductionInterval(animal);
         Timer timer = animalTimers.get(animal);
 
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -51,61 +73,73 @@ class Animal {
                     System.out.println(count + " " + animal.getProduct() + "(s) were produced by your " + animal + "(s).");
                 }
             }
-        }, interval, interval); 
+        }, interval, interval);
     }
 
+    /**
+     * Starts a timer to produce products from the specified animal type at regular intervals
+     * 
+     * @param animal the type of animal to start producing products from
+     */
     private int getProductionInterval(AnimalType animal) {
         switch (animal) {
-            case chicken:
-                return 10000; //10 sec
-            case cow:
-                return 20000; //20 sec
-            case pig:
-                return 30000; // 30 sec
-            default:
-                return 10000; // Default interval
+        case chicken:
+            return 15000; //15 sec
+        case cow:
+            return 20000; //20 sec
+        case pig:
+            return 30000; //30 sec
+        default:
+            return 10000;
         }
     }
 
+    /**
+     * Get the cost of a type of animal
+     * 
+     * @param animal the type of animal
+     * @return the cost per animal
+     */
     private int getAnimalCost(AnimalType animal) {
         switch (animal) {
-            case chicken:
-                return 3; //  cost 3 coins
-            case cow:
-                return 5; //  cost 5 coins
-            case pig:
-                return 8; //  cost 8 coins
-            default:
-                return 0; 
+        case chicken:
+            return 3;
+        case cow:
+            return 5;
+        case pig:
+            return 8;
+        default:
+            return 0;
         }
     }
 
-    // public void collectProducts() {
-    //     for (AnimalType animal : AnimalType.values()) {
-    //         int collected = products.get(animal);
-    //         if (collected > 0) {
-    //             System.out.println("You collected " + collected + " " + animal.getProduct() + "(s) from your " + animal + "(s)!");
-    //             products.put(animal, 0); // Reset collected products after collection
-    //         } else {
-    //             System.out.println("No " + animal.getProduct() + " available to collect.");
-    //         }
-    //     }
-    // }
-
+    /**
+     * Prints the current inventory of animals owned by the player.
+     */
     public void viewAnimals() {
         System.out.println("Your animals:");
-        for (AnimalType animal : AnimalType.values()) {
+        for (AnimalType animal: AnimalType.values()) {
             System.out.println(animal + ": " + animals.get(animal));
         }
     }
-
+    
+    /**
+     * Prints the current inventory of products collected from animals.
+     */
     public void viewProducts() {
         System.out.println("Your collected products:");
-        for (AnimalType animal : AnimalType.values()) {
+        for (AnimalType animal: AnimalType.values()) {
             System.out.println(animal.getProduct() + ": " + products.get(animal));
         }
     }
 
+    /**
+     * Uses a specified amount of products of a given type, if available.
+     * 
+     * @param animal the type of product to use.
+     * @param amount the amount of the product to use.
+     * @return true if the product was used successfully, false if insufficient product was available.
+     */
     public boolean useProduct(AnimalType animal, int amount) {
         if (products.get(animal) >= amount) {
             products.put(animal, products.get(animal) - amount);
@@ -116,17 +150,23 @@ class Animal {
         }
     }
 
-    // Method to unbuy animals
-public void unbuyAnimal(AnimalType animal, int number) {
-    int costPerAnimal = getAnimalCost(animal);
-    int totalCost = costPerAnimal * number;
-    if (animals.get(animal) >= number) {
-        animals.put(animal, animals.get(animal) - number); // Remove the animals from inventory
-        wallet.addMoney(totalCost); 
-        System.out.println("Undo buying" + number + " " + animal + "(s).  " + totalCost + " coins is refunded to your wallet.");
-    } else {
-        System.out.println("Cannot undo animal purchase. Not enough animals in inventory.");
+    /**
+     * Reverses the purchase of animals, refunding the cost and adjusting inventory accordingly.
+     * 
+     * @param animal the type of animal to unbuy.
+     * @param number the number of animals to unbuy.
+     * @throws RuntimeException if the transaction cannot be undone due to insufficient animals in inventory.
+     */
+    public void unbuyAnimal(AnimalType animal, int number) {
+        int costPerAnimal = getAnimalCost(animal);
+        int totalCost = costPerAnimal * number;
+        if (animals.get(animal) >= number) {
+            animals.put(animal, animals.get(animal) - number);
+            wallet.addMoney(totalCost);
+            System.out.println("Undo buying" + number + " " + animal + "(s).  " + totalCost + " coins is refunded to your wallet.");
+        } else {
+            System.out.println("Cannot undo animal purchase. Not enough animals in inventory.");
+        }
     }
-}
 
 }
