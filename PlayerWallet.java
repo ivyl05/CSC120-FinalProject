@@ -22,7 +22,7 @@ class PlayerWallet {
      * @return The current amount of money the player has
      */
     public int getMoney() {
-        return money;
+        return this.money;
     }
 
     /**
@@ -33,8 +33,8 @@ class PlayerWallet {
      */
     public void addMoney(int amount) {
         if (amount > 0) {
-            money += amount;
-            System.out.println("You earned " + amount + " coins! Your total is now " + money + " coins.");
+            this.money += amount;
+            System.out.println("You earned " + amount + " coins! Your total is now " + this.money + " coins.");
         } else {
             throw new RuntimeException("Invalid amount to add."); //add to player
         }
@@ -47,11 +47,11 @@ class PlayerWallet {
      * @return true if the transaction was successful (enough funds were available), false otherwise
      */
     public boolean spendMoney(int amount) {
-        if (amount > money) {
+        if (amount > this.money) {
             return false;
         } else {
-            money -= amount;
-            System.out.println("You spent " + amount + " coins. Your remaining balance is " + money + " coins.");
+            this.money -= amount;
+            System.out.println("You spent " + amount + " coins. Your remaining balance is " + this.money + " coins.");
             return true;
         }
     }

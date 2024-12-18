@@ -21,14 +21,14 @@ class Animal {
      */
     public Animal(PlayerWallet wallet) {
         this.wallet = wallet;
-        animals = new Hashtable < > ();
-        products = new Hashtable < > ();
-        animalTimers = new Hashtable < > ();
+        this.animals = new Hashtable < > ();
+        this.products = new Hashtable < > ();
+        this.animalTimers = new Hashtable < > ();
 
         for (AnimalType animal: AnimalType.values()) {
-            animals.put(animal, 0);
-            products.put(animal, 0);
-            animalTimers.put(animal, new Timer(true));
+            this.animals.put(animal, 0);
+            this.products.put(animal, 0);
+            this.animalTimers.put(animal, new Timer(true));
         }
     }
 
@@ -47,8 +47,8 @@ class Animal {
         int costPerAnimal = getAnimalCost(animal);
         int totalCost = costPerAnimal * number;
 
-        if (wallet.spendMoney(totalCost)) {
-            animals.put(animal, animals.get(animal) + number);
+        if (this.wallet.spendMoney(totalCost)) {
+            animals.put(animal, this.animals.get(animal) + number);
             System.out.println("You bought " + number + " " + animal + "(s) for " + totalCost + " coins!");
             startProductionTimer(animal); // Start product generation timer
         } else {
@@ -141,8 +141,8 @@ class Animal {
      * @return true if the product was used successfully, false if insufficient product was available.
      */
     public boolean useProduct(AnimalType animal, int amount) {
-        if (products.get(animal) >= amount) {
-            products.put(animal, products.get(animal) - amount);
+        if (this.products.get(animal) >= amount) {
+            this.products.put(animal, this.products.get(animal) - amount);
             return true;
         } else {
             System.out.println("Not enough " + animal.getProduct() + " available.");
@@ -160,9 +160,9 @@ class Animal {
     public void unbuyAnimal(AnimalType animal, int number) {
         int costPerAnimal = getAnimalCost(animal);
         int totalCost = costPerAnimal * number;
-        if (animals.get(animal) >= number) {
-            animals.put(animal, animals.get(animal) - number);
-            wallet.addMoney(totalCost);
+        if (this.animals.get(animal) >= number) {
+            this.animals.put(animal, this.animals.get(animal) - number);
+            this.wallet.addMoney(totalCost);
             System.out.println("Undo buying" + number + " " + animal + "(s).  " + totalCost + " coins is refunded to your wallet.");
         } else {
             System.out.println("Cannot undo animal purchase. Not enough animals in inventory.");

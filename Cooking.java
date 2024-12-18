@@ -25,11 +25,11 @@ class Cooking {
         this.cropInventory = cropInventory;
         this.animalInventory = animalInventory;
         this.producedItems = new Hashtable < > ();
-        producedItems.put("sandwich", 0);
-        producedItems.put("applepie", 0);
-        producedItems.put("pizza", 0);
-        producedItems.put("cheese", 0);
-        producedItems.put("cream", 0);
+        this.producedItems.put("sandwich", 0);
+        this.producedItems.put("applepie", 0);
+        this.producedItems.put("pizza", 0);
+        this.producedItems.put("cheese", 0);
+        this.producedItems.put("cream", 0);
     }
     
     /**
@@ -50,11 +50,11 @@ class Cooking {
      * @throws RuntimeException if there are not enough ingredients to make a sandwich
      */
     public void makeSandwich() {
-        if (cropInventory.useCrop(CropType.wheat, 2) && animalInventory.useProduct(AnimalType.chicken, 1)) {
+        if (this.cropInventory.useCrop(CropType.wheat, 2) && this.animalInventory.useProduct(AnimalType.chicken, 1)) {
             System.out.println("Making a sandwich! It will be ready in 5 seconds...");
             delay(5000);
             System.out.println("Your sandwich is ready! ⧽(•‿•)⧼");
-            producedItems.put("sandwich", producedItems.get("sandwich") + 1);
+            this.producedItems.put("sandwich", this.producedItems.get("sandwich") + 1);
         } else {
             throw new RuntimeException("Not enough ingredients to make a sandwich. You need 2 wheat and 1 egg.");
         }
@@ -66,12 +66,12 @@ class Cooking {
      * @throws RuntimeException if there are not enough ingredients to make an ApplePie
      */
     public void makeApplePie() {
-        if (cropInventory.useCrop(CropType.apple, 3) && cropInventory.useCrop(CropType.wheat, 1) &&
-            animalInventory.useProduct(AnimalType.chicken, 2)) {
+        if (this.cropInventory.useCrop(CropType.apple, 3) && this.cropInventory.useCrop(CropType.wheat, 1) &&
+            this.animalInventory.useProduct(AnimalType.chicken, 2)) {
             System.out.println("Making an apple pie! It will be ready in 10 seconds...");
             delay(10000);
             System.out.println("Your applepie is ready! ⧽(•‿•)⧼");
-            producedItems.put("apple pie", producedItems.get("apple pie") + 1);
+            producedItems.put("apple pie", this.producedItems.get("apple pie") + 1);
         } else {
             throw new RuntimeException("Not enough ingredients to make an apple pie. You need 3 apples, 1 wheat, and 2 eggs.");
         }
@@ -83,13 +83,13 @@ class Cooking {
      * @throws RuntimeException if there are not enough ingredients to make a pizza
      */
     public void makePizza() {
-        if (cropInventory.useCrop(CropType.wheat, 3) && cropInventory.useCrop(CropType.corn, 2) &&
-            producedItems.get("cheese") > 0 && animalInventory.useProduct(AnimalType.cow, 1)) {
-            producedItems.put("cheese", producedItems.get("cheese") - 1);
+        if (this.cropInventory.useCrop(CropType.wheat, 3) && this.cropInventory.useCrop(CropType.corn, 2) &&
+            this.producedItems.get("cheese") > 0 && this.animalInventory.useProduct(AnimalType.cow, 1)) {
+            this.producedItems.put("cheese", this.producedItems.get("cheese") - 1);
             System.out.println("Making a pizza! It will be ready in 15 seconds...");
             delay(15000);
             System.out.println("Your pizza is ready! !⧽(•‿•)⧼");
-            producedItems.put("pizza", producedItems.get("pizza") + 1);
+            this.producedItems.put("pizza", this.producedItems.get("pizza") + 1);
         } else {
             throw new RuntimeException("Not enough ingredients to make a pizza. You need 3 wheat, 2 corn, 1 cheese, and 1 milk.");
         }
@@ -101,11 +101,11 @@ class Cooking {
      * @throws RuntimeException if there are not enough ingredients to make a cheese
      */
     public void makeCheese() {
-        if (animalInventory.useProduct(AnimalType.cow, 1)) {
+        if (this.animalInventory.useProduct(AnimalType.cow, 1)) {
             System.out.println("Making cheese! It will be ready in 5 seconds...");
             delay(5000);
-            producedItems.put("cheese", producedItems.get("cheese") + 1);
-            System.out.println("You made 1 cheese! Now you have " + producedItems.get("cheese") + " cheese. ⧽(•‿•)⧼");
+            this.producedItems.put("cheese", this.producedItems.get("cheese") + 1);
+            System.out.println("You made 1 cheese! Now you have " + this.producedItems.get("cheese") + " cheese. ⧽(•‿•)⧼");
         } else {
             throw new RuntimeException("Not enough milk to make cheese. You need 1 milk.");
         }
@@ -117,11 +117,11 @@ class Cooking {
      * @throws RuntimeException if there are not enough ingredients to make a cream
      */
     public void makeCream() {
-        if (animalInventory.useProduct(AnimalType.cow, 1)) {
+        if (this.animalInventory.useProduct(AnimalType.cow, 1)) {
             System.out.println("Making cream! It will be ready in 5 seconds...");
             delay(5000);
-            producedItems.put("cream", producedItems.get("cream") + 1);
-            System.out.println("You made 1 cream! Now you have " + producedItems.get("cream") + " cream. ⧽(•‿•)⧼");
+            this.producedItems.put("cream", this.producedItems.get("cream") + 1);
+            System.out.println("You made 1 cream! Now you have " + this.producedItems.get("cream") + " cream. ⧽(•‿•)⧼");
         } else {
             throw new RuntimeException("Not enough milk to make cream. You need 1 milk.");
         }
@@ -144,8 +144,8 @@ class Cooking {
      * Print all produced food items
      */
     public void viewProducedItems() {
-        for (String item: producedItems.keySet()) {
-            System.out.println(item + ": " + producedItems.get(item));
+        for (String item: this.producedItems.keySet()) {
+            System.out.println(item + ": " + this.producedItems.get(item));
         }
     }
 }

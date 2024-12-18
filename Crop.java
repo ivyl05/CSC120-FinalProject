@@ -45,7 +45,7 @@
       * @throws RuntimeException if there are not enough seeds or the number is invalid
       */
      public void growCrop(CropType crop, int number) {
-         if (number <= seeds.get(crop)) {
+         if (number <= this.seeds.get(crop)) {
              if (number > 0) {
                  Timer myTimer = new Timer();
                  TimerTask task = new TimerTask() {
@@ -58,15 +58,15 @@
  
                  if (crop.equals(CropType.wheat)) {
                      System.out.println("Wheat growing! It will take 10 seconds.");
-                     seeds.put(crop, seeds.get(crop) - number);
+                     seeds.put(crop, this.seeds.get(crop) - number);
                      myTimer.schedule(task, 10000);
                  } else if (crop.equals(CropType.corn)) {
                      System.out.println("Corn growing! It will take 30 seconds.");
-                     seeds.put(crop, seeds.get(crop) - number);
+                     seeds.put(crop, this.seeds.get(crop) - number);
                      myTimer.schedule(task, 30000);
                  } else if (crop.equals(CropType.apple)) {
                      System.out.println("Apple growing! It will take 60 seconds.");
-                     seeds.put(crop, seeds.get(crop) - number);
+                     seeds.put(crop, this.seeds.get(crop) - number);
                      myTimer.schedule(task, 60000);
                  }
              } else {
@@ -87,9 +87,9 @@
      public void buySeeds(CropType crop, int number) { // each seed cost 1 coin
          int totalCost = number;
  
-         if (wallet.spendMoney(totalCost)) {
+         if (this.wallet.spendMoney(totalCost)) {
              if (number > 0) {
-                 seeds.put(crop, seeds.get(crop) + number);
+                this.seeds.put(crop, this.seeds.get(crop) + number);
                  System.out.println("You bought " + number + " " + crop + " seeds for " + totalCost + " coins.");
              } else {
                  throw new RuntimeException("Please enter a valid number.");
@@ -107,10 +107,10 @@
       * @throws RuntimeException if the player does not have enough crops or the number is invalid
       */
      public void sellCrops(CropType crop, int number) {
-         if (cropNumber.get(crop) >= number) {
+         if (this.cropNumber.get(crop) >= number) {
              if (number > 0) {
                  int earnings = getCropSellPrice(crop) * number;
-                 cropNumber.put(crop, cropNumber.get(crop) - number);
+                 this.cropNumber.put(crop, this.cropNumber.get(crop) - number);
                  wallet.addMoney(earnings);
                  System.out.println("You sold " + number + " " + crop + " for " + earnings + " coins.");
              } else {
@@ -130,9 +130,9 @@
       * @throws RuntimeException if the amount is invalid
       */
      public boolean useCrop(CropType crop, int amount) {
-         if (cropNumber.get(crop) >= amount) {
+         if (this.cropNumber.get(crop) >= amount) {
              if (amount > 0) {
-                 cropNumber.put(crop, cropNumber.get(crop) - amount);
+                 this.cropNumber.put(crop, this.cropNumber.get(crop) - amount);
                  return true;
              } else {
                  throw new RuntimeException("Please enter a valid number.");
@@ -151,9 +151,9 @@
       */
      public void unbuySeeds(CropType crop, int number) {
          int totalCost = number;
-         if (seeds.get(crop) >= number) {
-             seeds.put(crop, seeds.get(crop) - number);
-             wallet.addMoney(totalCost);
+         if (this.seeds.get(crop) >= number) {
+             this.seeds.put(crop, seeds.get(crop) - number);
+             this.wallet.addMoney(totalCost);
              System.out.println("Undo buying " + number + " " + crop + " seeds. " + totalCost + " coins are refunded");
          } else {
              throw new RuntimeException("Cannot undo seed purchase. You don't have enough seeds in the inventory.");
@@ -169,8 +169,8 @@
       */
      public void unsellCrops(CropType crop, int number) {
          int earnings = getCropSellPrice(crop) * number;
-         if (wallet.spendMoney(earnings)) {
-             cropNumber.put(crop, cropNumber.get(crop) + number);
+         if (this.wallet.spendMoney(earnings)) {
+            this.cropNumber.put(crop, this.cropNumber.get(crop) + number);
              System.out.println("Undo selling " + number + " " + crop + ". " + earnings + " coins are refunded.");
          } else {
              System.out.println("Cannot undo crop sale. Not enough money to refund.");
